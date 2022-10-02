@@ -13,17 +13,26 @@ let guesses = [''];
 let colors = [];
 
 function init() {
-    // Test stuff
-    guesses = ['wrong', 'right', 'hello', 'bl'];
-    colors = [
-        [GREY, GREY, GREEN, YELLOW, GREY],
-        [GREEN, GREEN, GREEN, YELLOW, GREEN],
-        [GREEN, YELLOW, GREEN, YELLOW, GREY],
-    ];
-
     document.addEventListener('keydown', (evt) => {
+        if (won) {
+            return;
+        }
+
         if (evt.key == 'Backspace') {
             removeLetter();
+        }
+        else if (evt.key == 'Enter') {
+            if (guesses[guesses.length - 1].length == 5) {
+                const guessColors = getColors(guesses[guesses.length - 1], currentWord);
+                colors.push(guessColors);
+
+                if (isAllGreen(guessColors)) {
+                    won = true;
+                }
+                else {
+                    guesses.push('');
+                }
+            }
         }
         else if (allLetters.has(evt.key)) {
             addLetter(evt.key);
@@ -40,6 +49,7 @@ function init() {
 function reset() {
     guesses = [''];
     colors = [];
+    won = false;
 }
 
 function addLetter(letter) {
@@ -87,14 +97,21 @@ function getColors(guess, actual) {
                 1);
         }
     }
+
+    return colors;
 }
 
 function updateUI() {
     const guessesElem = document.querySelector('.guesses');
-    while (guessesElem.numChildren > guesses.length) {
+    while (guessesElem.children.length < guesses.length) {
         const guessElem = document.createElement('div');
         guessElem.classList.add('guess');
         guessesElem.appendChild(guessElem);
+        for (let i = 0; i < 5; i++) {
+            const guessLetterElem = document.createElement('div');
+            guessLetterElem.classList.add('guess-letter');
+            guessElem.appendChild(guessLetterElem)
+        }
     }
 
     for (let i = 0; i < guesses.length; i++) {
@@ -119,6 +136,10 @@ function updateUI() {
             }
         }
     }
+}
+
+function isAllGreen(guessColors) {
+    return guessColors.every(c => c == GREEN);
 }
 
 window.onload = init;
