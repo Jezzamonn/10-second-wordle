@@ -58,6 +58,8 @@ function init() {
 }
 
 function every10sec() {
+    const lastWordElem = document.querySelector('.lastword');
+    lastWordElem.innerText = `Last word was ${currentWord}`;
     getCurrentWord();
     reset();
     updateGuessUI();
