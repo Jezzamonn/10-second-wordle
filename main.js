@@ -130,8 +130,11 @@ function handleKey(key) {
 }
 
 function reset() {
-    guesses = [''];
-    colors = [];
+    // guesses = [''];
+    // colors = [];
+    for (let i = 0; i < colors.length; i++) {
+        colors[i] = getColors(guesses[i], currentWord);
+    }
     won = false;
 }
 
