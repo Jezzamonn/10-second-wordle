@@ -61,7 +61,6 @@ function every10sec() {
     getCurrentWord();
     reset();
     updateGuessUI();
-    
 }
 
 function getCurrentWord() {
@@ -78,7 +77,7 @@ function handleKey(key) {
         return;
     }
 
-    if (key == 'Backspace') {
+    if (key == 'Backspace' || key == 'Delete') {
         removeLetter();
     }
     else if (key == 'Enter') {
@@ -221,6 +220,15 @@ function createKeyboardUI() {
             }
             keyElem.innerText = key.toUpperCase();
             keyboardRowElem.appendChild(keyElem);
+
+            keyElem.addEventListener('mousedown', (evt) => {
+                handleKey(key);
+                evt.preventDefault();
+            });
+            keyElem.addEventListener('touchdown', (evt) => {
+                handleKey(key);
+                evt.preventDefault();
+            });
         }
     }
 }
