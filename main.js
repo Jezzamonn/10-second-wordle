@@ -68,8 +68,6 @@ function getCurrentWord() {
     const wordIndex = Math.round(timeDiff / 10000);
 
     currentWord = possibleActualWords[wordIndex % possibleActualWords.length];
-
-    console.log(currentWord);
 }
 
 function handleKey(key) {
