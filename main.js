@@ -10,13 +10,19 @@ const allLetters = new Set(
     'qwertyuiopasdfghjklzxcvbnm'.split('')
 );
 
+const keyboard = [
+    'qwertyuiop'.split(''),
+    'asdfghjkl'.split(''),
+    ['Enter', ...'zxcvbnm'.split(''), 'Delete'],
+]
+
 let won = false;
 let numWins = 0;
 let currentWord = 'hello';
 
 const GREY = 1;
-const GREEN = 2;
-const YELLOW = 3;
+const YELLOW = 2;
+const GREEN = 3;
 
 let guesses = [''];
 let colors = [];
@@ -44,6 +50,8 @@ function init() {
 
     reset();
 
+    createKeyboardUI();
+
     updateGuessUI();
     updateCountdownUI();
     updateScoreUI();
@@ -53,6 +61,7 @@ function every10sec() {
     getCurrentWord();
     reset();
     updateGuessUI();
+    
 }
 
 function getCurrentWord() {
@@ -186,6 +195,8 @@ function updateGuessUI() {
             guessLetterElem.classList.toggle('guess-letter-grey', color == GREY);
         }
     }
+
+    updateKeyboardUI();
 }
 
 function updateCountdownUI() {
@@ -196,6 +207,49 @@ function updateCountdownUI() {
 function updateScoreUI() {
     const scoreElem = document.querySelector('.score');
     scoreElem.innerText = `Score: ${numWins}`;
+}
+
+function createKeyboardUI() {
+    const keyboardElem = document.querySelector('.keyboard');
+    for (let r = 0; r < 3; r++) {
+        const keyboardRowElem = keyboardElem.children[r];
+        for (const key of keyboard[r]) {
+            const keyElem = document.createElement('div');
+            keyElem.classList.add('keyboard-key');
+            if (key.length > 1) {
+                keyElem.classList.add('keyboard-key-wide');
+            }
+            keyElem.innerText = key.toUpperCase();
+            keyboardRowElem.appendChild(keyElem);
+        }
+    }
+}
+
+function updateKeyboardUI() {
+    const keyboardElem = document.querySelector('.keyboard');
+    for (let r = 0; r < 3; r++) {
+        const keyboardRowElem = keyboardElem.children[r];
+        for (let k = 0; k < keyboard[r].length; k++) {
+            const key = keyboard[r][k];
+            const keyElem = keyboardRowElem.children[k];
+
+            let color = -1;
+            for (let g = 0; g < guesses.length; g++) {
+                if (g >= colors.length) {
+                    break;
+                }
+                for (let l = 0; l < 5; l++) {
+                    if (guesses[g].charAt(l) == key) {
+                        color = Math.max(color, colors[g][l]);
+                    }
+                }
+            }
+
+            keyElem.classList.toggle('guess-letter-green', color == GREEN);
+            keyElem.classList.toggle('guess-letter-yellow', color == YELLOW);
+            keyElem.classList.toggle('guess-letter-grey', color == GREY);
+        }
+    }
 }
 
 function isAllGreen(guessColors) {
