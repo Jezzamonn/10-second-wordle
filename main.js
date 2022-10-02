@@ -80,7 +80,7 @@ function init() {
 function makeFirstGuess() {
     let guessWord = '';
     let guessColors = [];
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 200; i++) {
         const r = Math.floor(Math.random() * possibleActualWords.length);
         const randomWord = possibleActualWords[r];
 
