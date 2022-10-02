@@ -3,6 +3,25 @@ body, html {
     font-family: sans-serif;
 }
 
+p {
+    font-size: 30px;
+}
+
+.status-bar {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.spacer {
+    flex: 1;
+}
+
+.countdown {
+    width: 230px;
+}
+
 .container {
     display: flex;
     flex-direction: column;
