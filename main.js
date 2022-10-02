@@ -1,20 +1,39 @@
+const allLetters = new Set(
+    'qwertyuiopasdfghjklzxcvbnm'.split('')
+);
+
 let won = false;
 let currentWord = 'hello';
 
-let GREY = 1;
-let GREEN = 2;
-let YELLOW = 3;
+const GREY = 1;
+const GREEN = 2;
+const YELLOW = 3;
 
 let guesses = [''];
 let colors = [];
 
 function init() {
+    // Test stuff
     guesses = ['wrong', 'right', 'hello', 'bl'];
     colors = [
         [GREY, GREY, GREEN, YELLOW, GREY],
         [GREEN, GREEN, GREEN, YELLOW, GREEN],
         [GREEN, YELLOW, GREEN, YELLOW, GREY],
     ];
+
+    document.addEventListener('keydown', (evt) => {
+        if (evt.key == 'Backspace') {
+            removeLetter();
+        }
+        else if (allLetters.has(evt.key)) {
+            addLetter(evt.key);
+        }
+        else {
+            return;
+        }
+        updateUI();
+    });
+
     updateUI();
 }
 
