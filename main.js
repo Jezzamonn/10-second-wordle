@@ -16,6 +16,8 @@ const keyboard = [
     ['Enter', ...'zxcvbnm'.split(''), 'Delete'],
 ]
 
+const localStorageScoreName = '10-sec-wordle-score';
+
 let won = false;
 let numWins = 0;
 let currentWord = 'hello';
@@ -30,15 +32,27 @@ let colors = [];
 const startTime = 1664702500000
 
 function init() {
+    const popupElem = document.querySelector('.pop-up');
+
     document.addEventListener('keydown', (evt) => {
+        if (popupElem.parentElement) {
+            if (evt.key == 'Enter') {
+                popupElem.remove();
+            }
+            return;
+        }
         handleKey(evt.key);
     });
 
     const explanationButton = document.querySelector('.explanation-button');
     explanationButton.addEventListener('click', () => {
-        const popupElem = document.querySelector('.pop-up');
         popupElem.remove();
     });
+
+    const savedScore = localStorage.getItem(localStorageScoreName);
+    if (savedScore != null) {
+        numWins = parseInt(savedScore);
+    }
 
     secondCount = 0;
     setInterval(() => {
@@ -98,6 +112,7 @@ function handleKey(key) {
             if (isAllGreen(guessColors)) {
                 won = true;
                 numWins++;
+                localStorage.setItem(localStorageScoreName, numWins);
                 updateScoreUI();
             }
             else {
@@ -215,7 +230,7 @@ function updateCountdownUI() {
 
 function updateScoreUI() {
     const scoreElem = document.querySelector('.score');
-    scoreElem.innerText = `Score: ${numWins}`;
+    scoreElem.innerText = `Total wins: ${numWins}`;
 }
 
 function createKeyboardUI() {
