@@ -93,7 +93,7 @@ function makeFirstGuess() {
             continue;
         }
 
-        if (greensAndYellows <= bestGreensAndYellows) {
+        if (greensAndYellows < bestGreensAndYellows - 1) {
             continue;
         }
 
