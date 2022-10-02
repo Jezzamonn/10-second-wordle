@@ -80,6 +80,8 @@ function init() {
 function makeFirstGuess() {
     let guessWord = '';
     let guessColors = [];
+    let bestGreensAndYellows = 0;
+
     for (let i = 0; i < 200; i++) {
         const r = Math.floor(Math.random() * possibleActualWords.length);
         const randomWord = possibleActualWords[r];
@@ -91,8 +93,13 @@ function makeFirstGuess() {
             continue;
         }
 
+        if (greensAndYellows <= bestGreensAndYellows) {
+            continue;
+        }
+
         guessWord = randomWord;
         guessColors = randomWordColors;
+        bestGreensAndYellows = greensAndYellows;
 
         if (greens >= 1 && greensAndYellows >= 3) {
             break;
