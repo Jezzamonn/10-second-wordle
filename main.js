@@ -77,6 +77,32 @@ function init() {
     updateScoreUI();
 }
 
+function makeFirstGuess() {
+    let guessWord = '';
+    let guessColors = [];
+    for (let i = 0; i < 100; i++) {
+        const r = Math.floor(Math.random() * possibleActualWords.length);
+        const randomWord = possibleActualWords[r];
+
+        const randomWordColors = getColors(randomWord, currentWord);
+        const greens = numGreens(randomWordColors);
+        const greensAndYellows = numGreensAndYellows(randomWordColors)
+        if (greens == 5) {
+            continue;
+        }
+
+        guessWord = randomWord;
+        guessColors = randomWordColors;
+
+        if (greens >= 1 && greensAndYellows >= 3) {
+            break;
+        }
+    }
+
+    guesses.unshift(guessWord);
+    colors.unshift(guessColors);
+}
+
 function every10sec() {
     const lastWordElem = document.querySelector('.lastword');
     lastWordElem.innerText = `Last word was ${currentWord}`;
@@ -130,12 +156,11 @@ function handleKey(key) {
 }
 
 function reset() {
-    // guesses = [''];
-    // colors = [];
-    for (let i = 0; i < colors.length; i++) {
-        colors[i] = getColors(guesses[i], currentWord);
-    }
+    guesses = [''];
+    colors = [];
     won = false;
+
+    makeFirstGuess();
 }
 
 function addLetter(letter) {
@@ -290,6 +315,14 @@ function updateKeyboardUI() {
 
 function isAllGreen(guessColors) {
     return guessColors.every(c => c == GREEN);
+}
+
+function numGreensAndYellows(guessColors) {
+    return guessColors.filter(c => c == GREEN || c == YELLOW).length;
+}
+
+function numGreens(guessColors) {
+    return guessColors.filter(c => c == GREEN).length;
 }
 
 window.onload = init;
