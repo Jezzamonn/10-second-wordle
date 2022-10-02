@@ -34,6 +34,12 @@ function init() {
         handleKey(evt.key);
     });
 
+    const explanationButton = document.querySelector('.explanation-button');
+    explanationButton.addEventListener('click', () => {
+        const popupElem = document.querySelector('.pop-up');
+        popupElem.remove();
+    });
+
     secondCount = 0;
     setInterval(() => {
         secondCount++;
